@@ -1,6 +1,11 @@
-# Getting Started with Create React App
+# aragonOSx SDK Basic Demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a basic demo using the [aragonOSx SDK](https://github.com/aragon/sdk).
+
+## Stack
+- [Create React App](https://github.com/facebook/create-react-app)
+- [Typescript](https://www.typescriptlang.org/)
+- [Aragon SDK](https://github.com/aragon/sdk)
 
 ## Available Scripts
 
@@ -44,3 +49,5 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+To learn about the Aragon SDK, check out the [Aragon documentation here](https://devs.aragon.org).
