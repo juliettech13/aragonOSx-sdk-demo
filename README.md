@@ -6,6 +6,77 @@ This project is a basic demo using the [aragonOSx SDK](https://github.com/aragon
 - [Create React App](https://github.com/facebook/create-react-app)
 - [Typescript](https://www.typescriptlang.org/)
 - [Aragon SDK](https://github.com/aragon/sdk)
+- [RainbowKit](https://www.rainbowkit.com/)
+- [Ethers](https://docs.ethers.org/v5/)
+- [Wagmi](https://wagmi.sh/)
+
+## Setup
+
+1. Bootstrap the project by using Create React App with Typescript
+```bash
+npx create-react-app aragon-sdk-demo --template typescript
+```
+
+2. Install Rainbowkit, Wagmi, and Ethers to bootstrap connecting to the blockchain
+```bash
+npm install @rainbow-me/rainbowkit wagmi ethers
+```
+
+3. Set up RainbowKit providers and blockchain config
+```typescript
+// src/index.tsx
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { mainnet, goerli } from 'wagmi/chains';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
+
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const { chains, provider } = configureChains(
+  // Determine which chains you want for your app
+  [mainnet, goerli],
+  [
+    // Make sure to get your own API Key from Alchemy itself and store it within your .env file: https://dashboard.alchemy.com/
+    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_GOERLI_KEY || '' }),
+    publicProvider()
+  ]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: 'Aragon SDK demo',
+  chains
+});
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider
+})
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains}>
+        <App />
+      </RainbowKitProvider>
+    </WagmiConfig>
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
 
 ## Available Scripts
 
