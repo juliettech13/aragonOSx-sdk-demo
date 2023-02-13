@@ -7,6 +7,8 @@ import { mainnet, goerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
+import { AragonSDKWrapper } from './context/aragon-sdk';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -38,7 +40,9 @@ root.render(
   <React.StrictMode>
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <App />
+        <AragonSDKWrapper>
+          <App />
+        </AragonSDKWrapper>
       </RainbowKitProvider>
     </WagmiConfig>
   </React.StrictMode>
