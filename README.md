@@ -78,6 +78,118 @@ root.render(
 reportWebVitals();
 ```
 
+## Install the Aragon SDK
+
+In your terminal, install the [Aragon SDK](https://github.com/aragon/sdk).
+
+```bash
+npm install @aragon/sdk-client
+```
+
+## Set up the Aragon SDK in context
+
+We want to create a context hook for the Aragon SDK so that we have access to it throughout the entire app.
+
+1. Let's create the context folder within the root of our app.
+
+```bash
+mkdir src/context && touch src/context/aragon-sdk.tsx
+```
+
+2. Inside the `aragon-sdk.tsx` file, let's add the following code:
+
+```typescript
+import { createContext, useEffect, useContext, useState } from 'react';
+
+import { useSigner } from 'wagmi';
+import { Context, ContextParams } from '@aragon/sdk-client';
+
+const AragonSDKContext = createContext({});
+
+export function AragonSDKWrapper({ children }: any): JSX.Element {
+  const [context, setContext] = useState<Context | undefined>(undefined);
+  const signer = useSigner().data || undefined;
+
+  useEffect(() => {
+    const aragonSDKContextParams: ContextParams = {
+      network: 'goerli', // mainnet, mumbai, etc
+      signer,
+      daoFactoryAddress: '0x66DBb74f6cADD2486CBFf0b9DF211e3D7961eBf9', // the DAO Factory contract address from the Goerli network
+      web3Providers: ['https://rpc.ankr.com/eth_goerli'], // feel free to use the provider of your choosing: Alchemy, Infura, etc.
+      ipfsNodes: [
+        {
+          url: 'https://testing-ipfs-0.aragon.network/api/v0',
+          headers: { 'X-API-KEY': process.env.REACT_APP_IPFS_KEY || '' } // make sure you have the key for your IPFS node within your .env file
+        },
+      ],
+      graphqlNodes: [
+        {
+          url:
+            'https://subgraph.satsuma-prod.com/aragon/core-goerli/api' // this will change based on the chain you're using
+        },
+      ],
+    };
+
+    setContext(new Context(aragonSDKContextParams));
+  }, [signer]);
+
+  return (
+    <AragonSDKContext.Provider value={{ context }}>
+      {children}
+    </AragonSDKContext.Provider>
+  )
+}
+
+export function useAragonSDKContext(): any {
+  return useContext(AragonSDKContext);
+}
+```
+
+3. Then, in your `src/index.tsx` file, add the context hook provider for the Aragon SDK so you have access to it everywhere in your application.
+
+```typescript
+// import rainbowkit provider, wagmi config, other providers, etc..
+import { AragonSDKWrapper } from './context/aragon-sdk';
+
+// setting up all chains, wallet, and provider config..
+// const { chains, provider } = configureChains(
+//   [mainnet, goerli],
+//   [
+//     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_GOERLI_KEY || '' }),
+//     publicProvider()
+//   ]
+// );
+
+// const { connectors } = getDefaultWallets({
+//   appName: 'aragonOSx demo',
+//   chains
+// });
+
+// const wagmiClient = createClient({
+//   autoConnect: true,
+//   connectors,
+//   provider
+// })
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains}>
+      // Adding the AragonSDKWrapper for the context hook
+        <AragonSDKWrapper>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AragonSDKWrapper>
+      </RainbowKitProvider>
+    </WagmiConfig>
+  </React.StrictMode>
+);
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
