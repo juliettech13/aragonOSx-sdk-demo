@@ -190,6 +190,8 @@ root.render(
 );
 ```
 
+> **CAREFULL:_** Webpack 5 doesn’t have the polyfill node needed to run several crypto packages, so if you started your app with create-react-app or similar, you may stumble upon a polyfill problem. In order to solve it, follow [this tutorial](https://www.alchemy.com/blog/how-to-polyfill-node-core-modules-in-webpack-5) or start your app with a tool like [Vite.js](https://vitejs.dev/) instead.
+
 ## Available Scripts
 
 In the project directory, you can run:
