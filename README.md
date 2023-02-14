@@ -178,8 +178,7 @@ root.render(
   <React.StrictMode>
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-      // Adding the AragonSDKWrapper for the context hook
-        <AragonSDKWrapper>
+        <AragonSDKWrapper> // Adding the AragonSDKWrapper for the context hook
           <BrowserRouter>
             <App />
           </BrowserRouter>
@@ -191,6 +190,10 @@ root.render(
 ```
 
 > **CAREFULL:_** Webpack 5 doesn’t have the polyfill node needed to run several crypto packages, so if you started your app with create-react-app or similar, you may stumble upon a polyfill problem. In order to solve it, follow [this tutorial](https://www.alchemy.com/blog/how-to-polyfill-node-core-modules-in-webpack-5) or start your app with a tool like [Vite.js](https://vitejs.dev/) instead.
+
+## Set up a basic front-end to use the SDK
+
+Through this basic front-end, we want to invest x amount of ETH into a custom DAO. This assumes you already have an Aragon DAO in place. If you don't, feel free to [create one here](https://app.aragon.org).
 
 ## Available Scripts
 
