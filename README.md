@@ -3,12 +3,14 @@
 This project is a basic demo using the [aragonOSx SDK](https://github.com/aragon/sdk).
 
 ## Stack
+- [Aragon SDK](https://github.com/aragon/sdk)
 - [Create React App](https://github.com/facebook/create-react-app)
 - [Typescript](https://www.typescriptlang.org/)
-- [Aragon SDK](https://github.com/aragon/sdk)
 - [RainbowKit](https://www.rainbowkit.com/)
-- [Ethers](https://docs.ethers.org/v5/)
-- [Wagmi](https://wagmi.sh/)
+- [Ethers Library](https://docs.ethers.org/v5/)
+- [Wagmi Library](https://wagmi.sh/)
+- [React-Boostrap CSS Framework](react-bootstrap.github.io/)
+- [Aphrodite CSS Framework](https://github.com/Khan/aphrodite)
 
 ## Setup
 
@@ -93,10 +95,10 @@ We want to create a context hook for the Aragon SDK so that we have access to it
 1. Let's create the context folder within the root of our app.
 
 ```bash
-mkdir src/context && touch src/context/aragon-sdk.tsx
+mkdir src/context && touch src/context/AragonSDK.tsx
 ```
 
-2. Inside the `aragon-sdk.tsx` file, let's add the following code:
+2. Inside the `AragonSDK.tsx` file, let's add the following code:
 
 ```typescript
 import { createContext, useEffect, useContext, useState } from 'react';
@@ -149,7 +151,7 @@ export function useAragonSDKContext(): any {
 
 ```typescript
 // import rainbowkit provider, wagmi config, other providers, etc..
-import { AragonSDKWrapper } from './context/aragon-sdk';
+import { AragonSDKWrapper } from './context/AragonSDK';
 
 // setting up all chains, wallet, and provider config..
 // const { chains, provider } = configureChains(
@@ -160,16 +162,7 @@ import { AragonSDKWrapper } from './context/aragon-sdk';
 //   ]
 // );
 
-// const { connectors } = getDefaultWallets({
-//   appName: 'aragonOSx demo',
-//   chains
-// });
-
-// const wagmiClient = createClient({
-//   autoConnect: true,
-//   connectors,
-//   provider
-// })
+// ......<Setup section above, Step 3>
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -189,11 +182,36 @@ root.render(
 );
 ```
 
-> **CAREFULL:_** Webpack 5 doesn’t have the polyfill node needed to run several crypto packages, so if you started your app with create-react-app or similar, you may stumble upon a polyfill problem. In order to solve it, follow [this tutorial](https://www.alchemy.com/blog/how-to-polyfill-node-core-modules-in-webpack-5) or start your app with a tool like [Vite.js](https://vitejs.dev/) instead.
+> **CAREFUL:_** Webpack 5 doesn’t have the polyfill node needed to run several crypto packages, so if you started your app with create-react-app or similar, you may stumble upon a polyfill problem. In order to solve it, follow [this tutorial](https://www.alchemy.com/blog/how-to-polyfill-node-core-modules-in-webpack-5) or start your app with a tool like [Vite.js](https://vitejs.dev/) instead.
 
 ## Set up a basic front-end to use the SDK
 
-Through this basic front-end, we want to invest x amount of ETH into a custom DAO. This assumes you already have an Aragon DAO in place. If you don't, feel free to [create one here](https://app.aragon.org).
+1. Firstly, I will install a CSS Framework to bootstrap front-end components, as well as set up the CSS in JS framework. I will use [React-Bootstrap](https://react-bootstrap.github.io/) and [Aphrodite](https://github.com/Khan/aphrodite) for this.
+
+```bash
+npm install react-bootstrap bootstrap aphrodite
+```
+
+In this basic front-end, we'll set up 4 main `components`:
+
+1. `Navbar`
+Contains the `ConnectButton` enabling users to connect their wallet into the dapp.
+
+2. `DepositETH`
+A `Form` enabling users to input the amount of ETH they want to deposit into the DAO.
+Those who deposit any amoount, will receive a DAO token in return.
+
+3. `MembersList`
+A table displaying all DAO token-holders.
+This is how we'll see the the address who deposited the ETH becoming a DAO member.
+
+4. `DisplayProposals`
+Cards displaying the proposals for that specific DAO.
+As a member, token-holders can now vote on these proposals.
+
+Keep in mind, that we assume throughout this process that an Aragon DAO already exists. If you don't have one, feel free to [create one here](https://app.aragon.org) or [create one through the SDK](https://github.com/aragon/sdk).
+
+You can run ```npm run start``` in your terminal to see the code in the browser.
 
 ## Available Scripts
 
