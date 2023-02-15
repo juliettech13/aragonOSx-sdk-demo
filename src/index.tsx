@@ -3,14 +3,16 @@ import ReactDOM from 'react-dom/client';
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, goerli } from 'wagmi/chains';
+import { goerli, mainnet } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
-import { AragonSDKWrapper } from './context/aragon-sdk';
+import { AragonSDKWrapper } from './context/AragonSDK';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@rainbow-me/rainbowkit/styles.css';
 
 const { chains, provider } = configureChains(
   // Determine which chains you want for your app
