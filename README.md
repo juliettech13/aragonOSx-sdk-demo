@@ -213,6 +213,56 @@ Keep in mind, that we assume throughout this process that an Aragon DAO already 
 
 You can run ```npm run start``` in your terminal to see the code in the browser.
 
+## Using the SDK
+
+### Deposit ETH
+
+Within the `DepositETH` component, we want to use the SDK so a user can deposit ETH into a DAO.
+
+```typescript
+import { Client, DaoDepositSteps, DepositParams, TokenType } from '@aragon/sdk-client';
+
+import { useAragonSDKContext } from '../../context/AragonSDK';
+import { ETHToWei } from '../../helpers/crypto';
+
+export default function DepositETH(): JSX.Element {
+  const [amountOfETH, setAmountOfETH] = useState<number>(0); // we can use this React hook within a form input to set the amount of ETH a user wants to deposit.
+
+  const { context } = useAragonSDKContext();
+
+  async function depositEthToDao() {
+    const client = new Client(context);
+
+    const depositParams: DepositParams = {
+      daoAddressOrEns: '0xae8586ee1ef50544683b6d9d608ff920ab081357',
+      amount: BigInt(ETHToWei(amountOfETH)),
+      type: TokenType.NATIVE
+    }
+
+    const steps = client.methods.deposit(depositParams);
+
+    for await (const step of steps) {
+      try {
+        switch(step.key) {
+          case DaoDepositSteps.DEPOSITING:
+            console.log(step.txHash);
+            break;
+          case DaoDepositSteps.DONE:
+            console.log(step.amount);
+            break;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  return (
+    //.... front-end form
+  )
+}
+```
+
 ## Available Scripts
 
 In the project directory, you can run:

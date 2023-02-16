@@ -1,4 +1,4 @@
-import { createContext, useEffect, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useSigner } from 'wagmi';
 import { Context, ContextParams } from '@aragon/sdk-client';
@@ -24,9 +24,9 @@ export function AragonSDKWrapper({ children }: any): JSX.Element {
       graphqlNodes: [
         {
           url:
-            'https://subgraph.satsuma-prod.com/aragon/core-goerli/api'
-        },
-      ],
+            'https://subgraph.satsuma-prod.com/qHR2wGfc5RLi6/aragon/core-goerli/version/v0.7.2-alpha/api'
+        }
+      ]
     };
 
     setContext(new Context(aragonSDKContextParams));
