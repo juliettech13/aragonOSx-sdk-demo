@@ -10,8 +10,8 @@ function App() {
   return (
     <>
       <NavBar />
-      <Container style={{ paddingTop: '2%' }}>
-        <h1 className="text-center">ParksDAO🌳</h1>
+      <Container className="text-center" style={{ paddingTop: '2%' }}>
+        <h1>ParksDAO🌳</h1>
         <DepositETH />
         <MembersList />
         <DisplayProposals />
