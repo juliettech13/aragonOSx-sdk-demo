@@ -16,7 +16,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 
 const { chains, provider } = configureChains(
   // Determine which chains you want for your app
-  [goerli],
+  [goerli, mainnet],
   [
     // Make sure to get your own API Key from Alchemy itself and store it within your .env file: https://dashboard.alchemy.com/
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_GOERLI_KEY || '' }),
