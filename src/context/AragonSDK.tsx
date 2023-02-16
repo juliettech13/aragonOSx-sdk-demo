@@ -24,7 +24,7 @@ export function AragonSDKWrapper({ children }: any): JSX.Element {
       graphqlNodes: [
         {
           url:
-            'https://subgraph.satsuma-prod.com/qHR2wGfc5RLi6/aragon/core-goerli/version/v0.7.2-alpha/api'
+            `https://subgraph.satsuma-prod.com/${process.env.REACT_APP_SUBGRAPH_KEY}/aragon/core-goerli/version/v0.7.2-alpha/api`
         }
       ]
     };
