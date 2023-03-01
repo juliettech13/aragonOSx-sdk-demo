@@ -14,7 +14,7 @@ export default function DepositETH(): JSX.Element {
     const client = new Client(context);
 
     const depositParams: DepositParams = {
-      daoAddressOrEns: '0xae8586ee1ef50544683b6d9d608ff920ab081357',
+      daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960',
       amount: BigInt(ETHToWei(amountOfETH)),
       type: TokenType.NATIVE
     }
@@ -25,10 +25,10 @@ export default function DepositETH(): JSX.Element {
       try {
         switch(step.key) {
           case DaoDepositSteps.DEPOSITING:
-            console.log(step.txHash);
+            alert(`Depositing ETH into DAO... here's your transaction: https://goerli.etherscan.io/tx/${step.txHash}`);
             break;
           case DaoDepositSteps.DONE:
-            console.log(step.amount);
+            alert(`Deposit of ${step.amount} ETH into DAO complete!`);
             break;
         }
       } catch (e) {
