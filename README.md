@@ -117,7 +117,7 @@ export function AragonSDKWrapper({ children }: any): JSX.Element {
     const aragonSDKContextParams: ContextParams = {
       network: 'goerli', // mainnet, mumbai, etc
       signer,
-      daoFactoryAddress: '0x66DBb74f6cADD2486CBFf0b9DF211e3D7961eBf9', // the DAO Factory contract address from the Goerli network. You can find the daoFactoryAddress you need from the active_contracts file within the osx repository here: https://github.com/aragon/osx/blob/develop/active_contracts.json
+      daoFactoryAddress: '0x16B6c6674fEf5d29C9a49EA68A19944f5a8471D3', // the DAO Factory contract address from the Goerli network. You can find the daoFactoryAddress you need from the active_contracts file within the osx repository here: https://github.com/aragon/osx/blob/develop/active_contracts.json
       web3Providers: ['https://rpc.ankr.com/eth_goerli'], // feel free to use the provider of your choosing: Alchemy, Infura, etc.
       ipfsNodes: [
         {
@@ -215,10 +215,13 @@ Within the `DepositETH` component, we want to use the SDK so a user can deposit 
 ```typescript
 // src/components/DepositETH/index.tsx
 
+import React, { useState } from 'react';
+import { Button, Container } from 'react-bootstrap';
 import { Client, DaoDepositSteps, DepositParams, TokenType } from '@aragon/sdk-client';
 
-import { useAragonSDKContext } from '../../context/AragonSDK';
 import { ETHToWei } from '../../helpers/crypto';
+import { useAragonSDKContext } from '../../context/AragonSDK';
+import { formatEther } from 'ethers/lib/utils.js';
 
 export default function DepositETH(): JSX.Element {
   const [amountOfETH, setAmountOfETH] = useState<number>(0);
@@ -229,9 +232,9 @@ export default function DepositETH(): JSX.Element {
     const client = new Client(context);
 
     const depositParams: DepositParams = {
-      daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960', // the DAO address you want to deposit to. can also be the ens "my-dao.dao.eth"
-      amount: BigInt(ETHToWei(amountOfETH)),
-      type: TokenType.NATIVE
+      type: TokenType.NATIVE, // means ETH
+      amount: BigInt(ETHToWei(amountOfETH)), // amount is always in wei
+      daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960' // my-dao.dao.eth
     }
 
     const steps = client.methods.deposit(depositParams);
@@ -240,10 +243,10 @@ export default function DepositETH(): JSX.Element {
       try {
         switch(step.key) {
           case DaoDepositSteps.DEPOSITING:
-            console.log(step.txHash);
+            alert(`Depositing ETH into DAO... here's your transaction: https://goerli.etherscan.io/tx/${step.txHash}`);
             break;
           case DaoDepositSteps.DONE:
-            console.log(step.amount);
+            alert(`Deposit of ${formatEther(amountOfETH)} ETH into DAO complete!`);
             break;
         }
       } catch (e) {
@@ -284,7 +287,7 @@ export default function MembersList(): JSX.Element {
   useEffect(() => {
     async function getDaoMembers() {
       const client = new Client(context); // general purpose client allowing us to call getDao
-      const daoAddressOrEns: string = "0xff25e3d89995ea3b97cede27f00ec2281a89e960"; // or my-dao.dao.eth
+      const daoAddressOrEns: string = '0xff25e3d89995ea3b97cede27f00ec2281a89e960'; // or my-dao.dao.eth
 
       const dao: DaoDetails | null = await client.methods.getDao(daoAddressOrEns); // returns details about our DAO
       const pluginAddress: string = dao?.plugins[0].instanceAddress || ''; // returns the pluginAddress we have installed
@@ -348,7 +351,7 @@ export default function DisplayProposals() {
 
   useEffect(() => {
     async function fetchProposals() {
-      const daoProposals: TokenVotingProposalListItem[] = await tokenVotingClient.methods.getProposals({ daoAddressOrEns: "0xff25e3d89995ea3b97cede27f00ec2281a89e960" });
+      const daoProposals: TokenVotingProposalListItem[] = await tokenVotingClient.methods.getProposals({ daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960' });
       setProposals(daoProposals);
     }
     fetchProposals();

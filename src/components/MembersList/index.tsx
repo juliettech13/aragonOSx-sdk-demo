@@ -11,7 +11,7 @@ export default function MembersList(): JSX.Element {
   useEffect(() => {
     async function getDaoMembers() {
       const client = new Client(context); // general purpose client allowing us to call getDao
-      const daoAddressOrEns: string = "0xff25e3d89995ea3b97cede27f00ec2281a89e960"; // or my-dao.dao.eth
+      const daoAddressOrEns: string = '0xff25e3d89995ea3b97cede27f00ec2281a89e960'; // or my-dao.dao.eth
 
       const dao: DaoDetails | null = await client.methods.getDao(daoAddressOrEns); // returns details about our DAO
       const pluginAddress: string = dao?.plugins[0].instanceAddress || ''; // returns the pluginAddress we have installed
