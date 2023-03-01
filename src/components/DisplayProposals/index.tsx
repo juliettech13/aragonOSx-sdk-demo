@@ -38,7 +38,7 @@ export default function DisplayProposals() {
             break;
         }
       } catch (err) {
-        console.error(err);
+        alert(err);
       }
     }
   }

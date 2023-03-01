@@ -4,6 +4,7 @@ import { Client, DaoDepositSteps, DepositParams, TokenType } from '@aragon/sdk-c
 
 import { ETHToWei } from '../../helpers/crypto';
 import { useAragonSDKContext } from '../../context/AragonSDK';
+import { formatEther } from 'ethers/lib/utils.js';
 
 export default function DepositETH(): JSX.Element {
   const [amountOfETH, setAmountOfETH] = useState<number>(0);
@@ -14,9 +15,9 @@ export default function DepositETH(): JSX.Element {
     const client = new Client(context);
 
     const depositParams: DepositParams = {
-      daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960',
+      type: TokenType.NATIVE,
       amount: BigInt(ETHToWei(amountOfETH)),
-      type: TokenType.NATIVE
+      daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960'
     }
 
     const steps = client.methods.deposit(depositParams);
@@ -28,7 +29,7 @@ export default function DepositETH(): JSX.Element {
             alert(`Depositing ETH into DAO... here's your transaction: https://goerli.etherscan.io/tx/${step.txHash}`);
             break;
           case DaoDepositSteps.DONE:
-            alert(`Deposit of ${step.amount} ETH into DAO complete!`);
+            alert(`Deposit of ${formatEther(amountOfETH)} ETH into DAO complete!`);
             break;
         }
       } catch (e) {
@@ -51,11 +52,6 @@ export default function DepositETH(): JSX.Element {
         onChange={(e) => setAmountOfETH(Number(e.target.value))}
       />
 
-      <div className="col-auto mx-auto">
-        <span id="helpInline" className="form-text">
-          You will get 1 $PARK token for every time you deposit ETH into the DAO.
-        </span>
-      </div>
       <Button className="btn-success" onClick={depositEthToDao}>
         Deposit
       </Button>

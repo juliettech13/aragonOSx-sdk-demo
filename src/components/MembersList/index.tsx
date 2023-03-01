@@ -10,13 +10,13 @@ export default function MembersList(): JSX.Element {
 
   useEffect(() => {
     async function getDaoMembers() {
-      const client = new Client(context);
+      const client = new Client(context); // general purpose client allowing us to call getDao
       const daoAddressOrEns: string = "0xff25e3d89995ea3b97cede27f00ec2281a89e960"; // or my-dao.dao.eth
 
-      const dao: DaoDetails | null = await client.methods.getDao(daoAddressOrEns);
-      const pluginAddress: string = dao?.plugins[0].instanceAddress || '';
+      const dao: DaoDetails | null = await client.methods.getDao(daoAddressOrEns); // returns details about our DAO
+      const pluginAddress: string = dao?.plugins[0].instanceAddress || ''; // returns the pluginAddress we have installed
 
-      const contextPlugin: ContextPlugin = ContextPlugin.fromContext(context);
+      const contextPlugin: ContextPlugin = ContextPlugin.fromContext(context); // enables us to create a TokenVotingClient so we can get our members
       const tokenVotingClient: TokenVotingClient = new TokenVotingClient(contextPlugin);
 
       const daoMembers: string[] | undefined = await tokenVotingClient.methods.getMembers(pluginAddress) || [];

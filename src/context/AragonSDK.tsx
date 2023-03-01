@@ -13,7 +13,7 @@ export function AragonSDKWrapper({ children }: any): JSX.Element {
     const aragonSDKContextParams: ContextParams = {
       network: 'goerli',
       signer,
-      daoFactoryAddress: '0x66DBb74f6cADD2486CBFf0b9DF211e3D7961eBf9',
+      daoFactoryAddress: '0x16B6c6674fEf5d29C9a49EA68A19944f5a8471D3',
       web3Providers: ['https://rpc.ankr.com/eth_goerli'],
       ipfsNodes: [
         {
