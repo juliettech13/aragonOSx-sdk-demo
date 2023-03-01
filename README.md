@@ -118,7 +118,7 @@ export function AragonSDKWrapper({ children }: any): JSX.Element {
     const aragonSDKContextParams: ContextParams = {
       network: 'goerli', // mainnet, mumbai, etc
       signer,
-      daoFactoryAddress: '0x66DBb74f6cADD2486CBFf0b9DF211e3D7961eBf9', // the DAO Factory contract address from the Goerli network
+      daoFactoryAddress: '0x66DBb74f6cADD2486CBFf0b9DF211e3D7961eBf9', // the DAO Factory contract address from the Goerli network. You can find the daoFactoryAddress you need from the active_contracts file within the osx repository here: https://github.com/aragon/osx/blob/develop/active_contracts.json
       web3Providers: ['https://rpc.ankr.com/eth_goerli'], // feel free to use the provider of your choosing: Alchemy, Infura, etc.
       ipfsNodes: [
         {
@@ -230,7 +230,7 @@ export default function DepositETH(): JSX.Element {
     const client = new Client(context);
 
     const depositParams: DepositParams = {
-      daoAddressOrEns: '0xae8586ee1ef50544683b6d9d608ff920ab081357',
+      daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960', // the DAO address you want to deposit to. can also be the ens "my-dao.dao.eth"
       amount: BigInt(ETHToWei(amountOfETH)),
       type: TokenType.NATIVE
     }
@@ -254,7 +254,7 @@ export default function DepositETH(): JSX.Element {
   }
 
   return (
-    //.... front-end form
+    //.... front-end deposit form
   )
 }
 ```
@@ -311,6 +311,7 @@ export default function MembersList(): JSX.Element {
           </tr>
         </thead>
         <tbody>
+        // We use the members state variable we just populated with members from the DAO
           {members.map((member, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
@@ -324,11 +325,100 @@ export default function MembersList(): JSX.Element {
 }
 ```
 
-## Available Scripts
+### Display and vote on proposals
+
+Lastly, we want to display all proposals a specific DAO has and enable users to vote on them if they're able.
+
+We do this by calling on the `getProposals` function, as well as the `voteProposal` function. Additionally, we could add a check `canVote` which verifies if the signer is able to vote in a specific proposal. However for simplicity, we won't do this here.
+
+```typescript
+// src/components/DisplayProposals
+
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Container, Row } from 'react-bootstrap';
+import { ContextPlugin, IVoteProposalParams, TokenVotingClient, TokenVotingProposalListItem, VoteProposalStep, VoteValues } from '@aragon/sdk-client';
+
+import { useAragonSDKContext } from '../../context/AragonSDK';
+
+export default function DisplayProposals() {
+  const [proposals, setProposals] = useState<TokenVotingProposalListItem[]>([]);
+
+  const { context } = useAragonSDKContext();
+  const contextPlugin: ContextPlugin = ContextPlugin.fromContext(context);
+  const tokenVotingClient: TokenVotingClient = new TokenVotingClient(contextPlugin);
+
+  useEffect(() => {
+    async function fetchProposals() {
+      const daoProposals: TokenVotingProposalListItem[] = await tokenVotingClient.methods.getProposals({ daoAddressOrEns: "0xff25e3d89995ea3b97cede27f00ec2281a89e960" });
+      setProposals(daoProposals);
+    }
+    fetchProposals();
+  });
+
+  async function vote(proposalId: string, voteInput: VoteValues) {
+    const voteParams: IVoteProposalParams = {
+      proposalId,
+      vote: voteInput
+    };
+
+    const steps = tokenVotingClient.methods.voteProposal(voteParams);
+
+    for await (const step of steps) {
+      try {
+        switch (step.key) {
+          case VoteProposalStep.VOTING:
+            alert(`Voting... Review your transaction here: https://goerli.etherscan.io/tx/${step.txHash}`);
+            break;
+          case VoteProposalStep.DONE:
+            alert(`Vote casted for proposal ${proposalId}!`);
+            break;
+        }
+      } catch (err) {
+        alert(err);
+      }
+    }
+  }
+
+  return (
+    <Container className="mx-auto">
+      <h3 className="text-center pt-5 pb-3">DAO Proposals</h3>
+      <Row>
+        // Display all proposals retrieved
+        {proposals.map((proposal, index) => {
+          const { id, metadata } = proposal;
+          return (
+            <Card border="success" className="mx-3 mb-5" style={{ width: 'auto' }} key={index}>
+              <Card.Body>
+                <Card.Title>{metadata.title}</Card.Title>
+                <Card.Text>
+                  {metadata.summary}
+                </Card.Text>
+                <div className="d-flex justify-content-between">
+                  // Vote on the proposals
+                  <Button variant="primary" onClick={() => vote(id, VoteValues.YES)}>Yay</Button>
+                  <Button variant="warning" onClick={() => vote(id, VoteValues.NO)}>Nay</Button>
+                </div>
+              </Card.Body>
+            </Card>
+          )
+          })}
+      </Row>
+    </Container>
+  )
+}
+```
+
+## Learn more
+
+Hope that helps you get started with using the Aragon OSx SDK! If you want to read more upon what the SDK does, feel free to head over to Aragon's [Developer Portal](https://devs.aragon.org) or reach out to me through [email](mailto:juliette@aragon.org) and I'll get back to you with support.
+
+Excited to see what you build!!
+
+### Additional available scripts
 
 In the project directory, you can run:
 
-### `npm start`
+#### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -336,12 +426,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+#### `npm test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+#### `npm run build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -350,21 +440,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-To learn about the Aragon SDK, check out the [Aragon documentation here](https://devs.aragon.org).
