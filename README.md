@@ -269,10 +269,14 @@ We want to display all members for our DAO. Members are defined as addresses who
 
 In order to do this, we will call into the `getMembers` function of the SDK, store the addresses on a state variable, then use that to map over it and return rows in a table.
 
+However, in order to call `getMembers`, we need the plugin address we're getting our members from. One DAO may have several plugins installed with many different members within it, so we want to make sure we pick the plugin that works for our use case. The best way to do this is calling `getDAO` to get our DAO details, this will include the plugins we have installed.
+
+Then, we can either iterate over them finding the one we need, OR simply calling it directly if we know what we want (as is the case below for simplicity).
+
 ```typescript
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { ContextPlugin, TokenVotingClient } from '@aragon/sdk-client';
+import { Client, ContextPlugin, DaoDetails, TokenVotingClient } from '@aragon/sdk-client';
 import { useAragonSDKContext } from '../../context/AragonSDK';
 
 export default function MembersList(): JSX.Element {
@@ -282,11 +286,16 @@ export default function MembersList(): JSX.Element {
 
   useEffect(() => {
     async function getDaoMembers() {
-      const contextPlugin: ContextPlugin = ContextPlugin.fromContext(context);
+      const client = new Client(context); // general purpose client allowing us to call getDao
+      const daoAddressOrEns: string = "0xff25e3d89995ea3b97cede27f00ec2281a89e960"; // or my-dao.dao.eth
+
+      const dao: DaoDetails | null = await client.methods.getDao(daoAddressOrEns); // returns details about our DAO
+      const pluginAddress: string = dao?.plugins[0].instanceAddress || ''; // returns the pluginAddress we have installed
+
+      const contextPlugin: ContextPlugin = ContextPlugin.fromContext(context); // enables us to create a TokenVotingClient so we can get our members
       const tokenVotingClient: TokenVotingClient = new TokenVotingClient(contextPlugin);
 
-      const daoAddressorEns: string = "0x16c6e7a2082e5f4f9fb96415b748ec7e20b9da87";
-      const daoMembers: string[] = await tokenVotingClient.methods.getMembers(daoAddressorEns);
+      const daoMembers: string[] | undefined = await tokenVotingClient.methods.getMembers(pluginAddress) || [];
       setMembers(daoMembers);
     };
     getDaoMembers();
