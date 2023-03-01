@@ -1,6 +1,6 @@
-# aragonOSx SDK Basic Demo
+# Aragon OSx SDK Basic Demo
 
-This project is a basic demo using the [aragonOSx SDK](https://github.com/aragon/sdk).
+This project is a basic dapp demo using the [Aragon OSx SDK](https://github.com/aragon/sdk). To find documentation on the Aragon OSx SDK, go [here](https://devs.aragon.org/docs/sdk).
 
 ## Stack
 - [Aragon SDK](https://github.com/aragon/sdk)
@@ -101,6 +101,8 @@ mkdir src/context && touch src/context/AragonSDK.tsx
 2. Inside the `AragonSDK.tsx` file, let's add the following code:
 
 ```typescript
+// src/context/AragonSDK.tsx
+
 import { createContext, useEffect, useContext, useState } from 'react';
 
 import { useSigner } from 'wagmi';
@@ -150,17 +152,10 @@ export function useAragonSDKContext(): any {
 3. Then, in your `src/index.tsx` file, add the context hook provider for the Aragon SDK so you have access to it everywhere in your application.
 
 ```typescript
+// src/index.tsx
+
 // import rainbowkit provider, wagmi config, other providers, etc..
 import { AragonSDKWrapper } from './context/AragonSDK';
-
-// setting up all chains, wallet, and provider config..
-// const { chains, provider } = configureChains(
-//   [mainnet, goerli],
-//   [
-//     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_GOERLI_KEY || '' }),
-//     publicProvider()
-//   ]
-// );
 
 // ......<Setup section above, Step 3>
 
@@ -199,7 +194,6 @@ Contains the `ConnectButton` enabling users to connect their wallet into the dap
 
 2. `DepositETH`
 A `Form` enabling users to input the amount of ETH they want to deposit into the DAO.
-Those who deposit any amoount, will receive a DAO token in return.
 
 3. `MembersList`
 A table displaying all DAO token-holders.
@@ -220,13 +214,15 @@ You can run ```npm run start``` in your terminal to see the code in the browser.
 Within the `DepositETH` component, we want to use the SDK so a user can deposit ETH into a DAO.
 
 ```typescript
+// src/components/DepositETH/index.tsx
+
 import { Client, DaoDepositSteps, DepositParams, TokenType } from '@aragon/sdk-client';
 
 import { useAragonSDKContext } from '../../context/AragonSDK';
 import { ETHToWei } from '../../helpers/crypto';
 
 export default function DepositETH(): JSX.Element {
-  const [amountOfETH, setAmountOfETH] = useState<number>(0); // we can use this React hook within a form input to set the amount of ETH a user wants to deposit.
+  const [amountOfETH, setAmountOfETH] = useState<number>(0);
 
   const { context } = useAragonSDKContext();
 
@@ -274,6 +270,8 @@ However, in order to call `getMembers`, we need the plugin address we're getting
 Then, we can either iterate over them finding the one we need, OR simply calling it directly if we know what we want (as is the case below for simplicity).
 
 ```typescript
+// src/components/MembersList/index.tsx
+
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { Client, ContextPlugin, DaoDetails, TokenVotingClient } from '@aragon/sdk-client';
