@@ -1,16 +1,18 @@
-# Aragon OSx SDK Basic Demo
+![Aragon](https://res.cloudinary.com/dacofvu8m/image/upload/v1677638385/Aragon%20CodeArena/aragon-logo-navy_gyr2qt.png)
 
-This project is a basic dapp demo using the [Aragon OSx SDK](https://github.com/aragon/sdk). To find documentation on the Aragon OSx SDK, go [here](https://devs.aragon.org/docs/sdk).
+# Aragon OSx SDK Demo
 
-## Stack
-- [Aragon SDK](https://github.com/aragon/sdk)
-- [Create React App](https://github.com/facebook/create-react-app)
-- [Typescript](https://www.typescriptlang.org/)
-- [RainbowKit](https://www.rainbowkit.com/)
-- [Ethers Library](https://docs.ethers.org/v5/)
-- [Wagmi Library](https://wagmi.sh/)
-- [React-Boostrap CSS Framework](react-bootstrap.github.io/)
-- [Aphrodite CSS Framework](https://github.com/Khan/aphrodite)
+This project is a dApp showcasing what's possible with the [Aragon OSx SDK](https://github.com/aragon/sdk).
+
+It shows how to:
+- Set up the Aragon SDK in a React project
+- Get a DAO's details
+- Deposit ETH into a DAO
+- Get members from a DAO
+- Display proposals published in a DAO
+- Vote in a DAO's proposals
+
+To find additional documentation on the [Aragon OSx SDK, go here](https://devs.aragon.org/docs/sdk).
 
 ## Setup
 
@@ -33,7 +35,7 @@ import ReactDOM from 'react-dom/client';
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, goerli } from 'wagmi/chains';
+import { goerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
@@ -42,7 +44,7 @@ import reportWebVitals from './reportWebVitals';
 
 const { chains, provider } = configureChains(
   // Determine which chains you want for your app
-  [mainnet, goerli],
+  [goerli],
   [
     // Make sure to get your own API Key from Alchemy itself and store it within your .env file: https://dashboard.alchemy.com/
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_GOERLI_KEY || '' }),
@@ -74,9 +76,6 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 ```
 
@@ -410,9 +409,21 @@ export default function DisplayProposals() {
 
 ## Learn more
 
-Hope that helps you get started with using the Aragon OSx SDK! If you want to read more upon what the SDK does, feel free to head over to Aragon's [Developer Portal](https://devs.aragon.org) or reach out to me through [email](mailto:juliette@aragon.org) and I'll get back to you with support.
+Hope that helps you get started with using the [Aragon OSx SDK](https://github.com/aragon/sdk)!
+
+If you want to read more on the SDK functionality, feel free to head over to Aragon's [Developer Portal](https://devs.aragon.org), Aragon's [Discord server](https://discord.gg/Wpk36QRdMN) to interact with the vibrant Developer community  or reach out to me directly through [email](mailto:juliette@aragon.org).
 
 Excited to see what you build!!
+
+### Stack
+- [Aragon SDK](https://github.com/aragon/sdk)
+- [Create React App](https://github.com/facebook/create-react-app)
+- [Typescript](https://www.typescriptlang.org/)
+- [RainbowKit](https://www.rainbowkit.com/)
+- [Ethers Library](https://docs.ethers.org/v5/)
+- [Wagmi Library](https://wagmi.sh/)
+- [React-Boostrap CSS Framework](react-bootstrap.github.io/)
+- [Aphrodite CSS Framework](https://github.com/Khan/aphrodite)
 
 ### Additional available scripts
 
