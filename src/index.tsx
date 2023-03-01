@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { goerli, mainnet } from 'wagmi/chains';
+import { goerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
@@ -16,7 +16,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 
 const { chains, provider } = configureChains(
   // Determine which chains you want for your app
-  [goerli, mainnet],
+  [goerli],
   [
     // Make sure to get your own API Key from Alchemy itself and store it within your .env file: https://dashboard.alchemy.com/
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_GOERLI_KEY || '' }),
