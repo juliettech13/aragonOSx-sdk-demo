@@ -214,22 +214,15 @@ You can run ```npm run start``` in your terminal to see the code in the browser.
 Within the `DepositETH` component, we want to use the SDK so a user can deposit ETH into a DAO.
 
 ```typescript
-<<<<<<< HEAD
 // src/components/DepositETH/index.tsx
 
-=======
->>>>>>> 49cb74d (deposit eth into a specific dao)
 import { Client, DaoDepositSteps, DepositParams, TokenType } from '@aragon/sdk-client';
 
 import { useAragonSDKContext } from '../../context/AragonSDK';
 import { ETHToWei } from '../../helpers/crypto';
 
 export default function DepositETH(): JSX.Element {
-<<<<<<< HEAD
-  const [amountOfETH, setAmountOfETH] = useState<number>(0);
-=======
   const [amountOfETH, setAmountOfETH] = useState<number>(0); // we can use this React hook within a form input to set the amount of ETH a user wants to deposit.
->>>>>>> 49cb74d (deposit eth into a specific dao)
 
   const { context } = useAragonSDKContext();
 
