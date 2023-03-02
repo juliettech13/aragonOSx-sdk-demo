@@ -2,7 +2,7 @@
 
 # Aragon OSx SDK Demo
 
-This project is a dApp showcasing what's possible with the [Aragon OSx SDK](https://github.com/aragon/sdk).
+This project is a dApp showcasing some of what's possible with the [Aragon OSx SDK](https://github.com/aragon/sdk).
 
 It shows how to:
 - Set up the Aragon SDK in a React project
@@ -13,6 +13,18 @@ It shows how to:
 - Vote in a DAO's proposals
 
 To find additional documentation on the [Aragon OSx SDK, go here](https://devs.aragon.org/docs/sdk).
+
+## Quickstart
+
+There's 2 ways to go around this repository:
+
+1. You can clone it and build on top of it. At which point, you merely want to fork it and run:
+
+```bash
+npm install && npm run start
+```
+
+2. You want to use it as a tutorial, at which point, follow the flow below 🙂.
 
 ## Setup
 
