@@ -24,7 +24,7 @@ There's 2 ways to go around this repository:
 npm install && npm run start
 ```
 
-2. You want to use it as a tutorial, at which point, follow the flow below 🙂.
+2. You want to use it as a tutorial, at which point, follow the flow below 🙂. You can tap into each step through going into the branches.
 
 ## Setup
 
