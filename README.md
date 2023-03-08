@@ -140,7 +140,7 @@ export function AragonSDKWrapper({ children }: any): JSX.Element {
       graphqlNodes: [
         {
           url:
-            'https://subgraph.satsuma-prod.com/aragon/core-goerli/api' // this will change based on the chain you're using
+            'https://subgraph.satsuma-prod.com/aragon/osx-goerli/api' // this will change based on the chain you're using (osx-mainnet alternatively)
         },
       ],
     };
