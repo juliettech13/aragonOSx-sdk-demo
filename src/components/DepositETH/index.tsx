@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
-import { Client, DaoDepositSteps, DepositParams, TokenType } from '@aragon/sdk-client';
+import { Client, DaoDepositSteps, DepositEthParams } from '@aragon/sdk-client';
+import { TokenType } from '@aragon/sdk-client-common';
 
 import { ETHToWei } from '../../helpers/crypto';
-import { useAragonSDKContext } from '../../context/AragonSDK';
+import { daoENS, useAragonSDKContext } from '../../context/AragonSDK';
 import { formatEther } from 'ethers/lib/utils.js';
 
 export default function DepositETH(): JSX.Element {
@@ -14,10 +15,10 @@ export default function DepositETH(): JSX.Element {
   async function depositEthToDao() {
     const client = new Client(context);
 
-    const depositParams: DepositParams = {
+    const depositParams: DepositEthParams = {
       type: TokenType.NATIVE,
       amount: BigInt(ETHToWei(amountOfETH)),
-      daoAddressOrEns: '0xff25e3d89995ea3b97cede27f00ec2281a89e960'
+      daoAddressOrEns: daoENS
     }
 
     const steps = client.methods.deposit(depositParams);
